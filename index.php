@@ -1,3 +1,8 @@
+<?php
+include 'core/init.php';
+Database::instance()->prepare("SELECT * FROM users")->execute();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
