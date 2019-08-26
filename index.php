@@ -1,6 +1,33 @@
 <?php
 include 'core/init.php';
 Database::instance()->prepare("SELECT * FROM users")->execute();
+
+if(isset($_POST['login'])){
+    $email    = Validate::escape($_POST['email']);
+    $password = Validate::escape($_POST['password']);
+
+    if(empty($email) or empty($password)){
+        $error = "Enter your email and password to login!";
+    }else {
+        if(!Validate::filterEmail($email)){
+            $error = "Invalid email";
+        }else{
+            if($user = $userObj->emailExist($email)){
+                $hash = $user->password;
+                if(password_verify($password, $hash)){
+                    //login
+                    $_SESSION['user_id'] = $user->user_id;
+                    $userObj->redirect('home.php');
+                }else{
+                    $error = "Email or Password is incorrect!";
+                }
+            }else{
+                $error = "No account with that email exists";
+            }
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
