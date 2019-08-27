@@ -1,9 +1,9 @@
 <?php
 include 'core/init.php';
 
-$user_id = $_SESSION['user_id'];
-$user = $userObj->userData($user_id);
-// echo $user->username;
+//$user_id = $_SESSION['user_id'];
+//$user = $userObj->userData($user_id);
+// echo $user_id;
 
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ $user = $userObj->userData($user_id);
 <body>
 <div class="home-wrapper">
     <div class="home-header-wrapper">
-        <img src="assets/img/nature.jpg"/>
+        <img src="img/nature.jpg"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
     </div>
@@ -29,7 +29,7 @@ $user = $userObj->userData($user_id);
 
                             <div class="profile-header">
                                 <div class="profile-img">
-                                    <img src="assets/img/avatar.png"/>
+                                    <img src="img/avatar.png"/>
                                 </div>
                                 <div class="profile-name">
                                     <a href="#"><?echo $user->firstname .' '. $user->lastname;?></a>

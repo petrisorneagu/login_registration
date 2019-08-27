@@ -11,7 +11,7 @@ if(isset($_POST['login'])){
         $error = "Enter your email and password to login!";
     }else {
         if(!Validate::filterEmail($email)){
-            $error = "Invaild email";
+            $error = "Invalid email";
         }else{
             if($user = $userObj->emailExist($email)){
                 $hash = $user->password;
@@ -23,7 +23,7 @@ if(isset($_POST['login'])){
                     $error = "Email or Password is incorrect!";
                 }
             }else{
-                $error = "No account with that email exists";
+                $error = "No account ";
             }
         }
     }
@@ -32,8 +32,8 @@ if(isset($_POST['login'])){
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PHP: Login and Registration With Email & Mobile Verification</title>
-    <link rel="stylesheet" href="assets/css/style.css"/>
+    <title>login & register</title>
+    <link rel="stylesheet" href="css/style.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
 </head>
@@ -41,7 +41,7 @@ if(isset($_POST['login'])){
 <div class="wrapper">
     <div class="wrapper-inner">
         <div class="header-wrapper">
-            <h1>Wellcome</h1>
+            <h1>Welcome</h1>
             <h3></h3>
         </div><!--HEADER WRAPPER ENDS-->
         <div class="sign-div">
