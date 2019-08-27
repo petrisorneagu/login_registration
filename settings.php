@@ -3,6 +3,7 @@ include 'core/init.php';
 
 $user_id = 1;
 $user = $userObj->userData($user_id);
+//echo $user;
 
 if(isset($_POST['update'])){
     $required = array('firstName','lastName','username','email','password');
@@ -18,15 +19,31 @@ if(isset($_POST['update'])){
             $lastName = Validate::escape($_POST['lastName']);
             $username = Validate::escape($_POST['username']);
             $email = Validate::escape($_POST['email']);
+            $password      = $_POST['password'];
 
         if(Validate::length($firstName, 2, 20)){
-            $errors['names'] = "Name can only be from 2-20 characters";
-        }elseif(Validate::length($lastName , 2, 20)){
-            $errors['names'] = "Name can only be from 2-20 characters";
-        }elseif(Validate::length($username , 2, 20)){
-            $errors['names'] = "Username can only be from 2-20 characters";
-        }elseif($userObj->usernameExists($username)){
-            $errors['username'] = "Username is already taken";
+            $errors['names'] = "Names can only be between in 2 - 20 characters";
+
+        }else if (Validate::length($lastName, 2, 20)){
+            $errors['names'] = "Names can only be between in 2 - 20 characters";
+        }
+
+        if(Validate::length($username, 2, 10)){
+            $errors['username'] = "Username can only be between in 2 - 10 characters";
+
+        }else if ( $userObj->usernameExists($username)){
+            $errors['username'] = "Username is already taken!";
+        }
+
+        if(!Validate::filterEmail($email)){
+            $errors['email'] = 'Invalid email format';
+        }elseif($email != $user->email && $userObj->emailExist($email)){
+            $errors['email'] = 'Email already exists';
+        }else{
+            if(password_verify($password, $user->password)){
+//                update password
+                $errors['password'] = 'Password is incorrect';
+            }
         }
     }
 }
