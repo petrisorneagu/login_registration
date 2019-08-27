@@ -1,8 +1,8 @@
 <?php
 include 'core/init.php';
 
-//$user_id = $_SESSION['user_id'];
-//$user = $userObj->userData($user_id);
+$user_id = 1;
+$user = $userObj->userData($user_id);
 
 if(isset($_POST['update'])){
     $required = array('firstName','lastName','username','email','password');
@@ -14,8 +14,20 @@ if(isset($_POST['update'])){
         }
     }
     if(empty($errors['allFields'])){
+            $firstName = Validate::escape($_POST['firstName']);
+            $lastName = Validate::escape($_POST['lastName']);
+            $username = Validate::escape($_POST['username']);
+            $email = Validate::escape($_POST['email']);
 
-
+        if(Validate::length($firstName, 2, 20)){
+            $errors['names'] = "Name can only be from 2-20 characters";
+        }elseif(Validate::length($lastName , 2, 20)){
+            $errors['names'] = "Name can only be from 2-20 characters";
+        }elseif(Validate::length($username , 2, 20)){
+            $errors['names'] = "Username can only be from 2-20 characters";
+        }elseif($userObj->usernameExists($username)){
+            $errors['username'] = "Username is already taken";
+        }
     }
 }
 
@@ -43,20 +55,26 @@ if(isset($_POST['update'])){
                         <input type="text" name="lastName" placeholder="Last Name"/>
                     </div>
                     <!-- Name Error -->
-                    <span class="error-in">Name fields error</span>
+                    <?php if(isset($errors['names'])):?>
+                    <span class="error-in"><?= $errors['names'];?></span>
+                    <?php endif;?>
 
                     <div>
                         <h3>Change User Name</h3>
                         <input type="text" name="username" placeholder="UserName" />
                     </div>
                     <!-- Username Error -->
-                    <span class="error-in">Username field error</span>
+                    <?php if(isset($errors['username'])):?>
+                        <span class="error-in"><?= $errors['username'];?></span>
+                    <?php endif;?>
 
                     <div>
                         <h3>Change Email</h3>
                         <input type="email" name="email" placeholder="Email" />
                         <!-- Email Error -->
-                        <span class="error-in">Email field error</span>
+                        <?php if(isset($errors['email'])):?>
+                            <span class="error-in"><?= $errors['email'];?></span>
+                        <?php endif;?>
                     </div>
 
 
@@ -65,7 +83,9 @@ if(isset($_POST['update'])){
                         <input type="password" name="password" placeholder="Password"/>
 
                         <!-- Password Errors -->
-                        <span class="error-in">Password field error</span>
+                        <?php if(isset($errors['password'])):?>
+                            <span class="error-in"><?= $errors['password'];?></span>
+                        <?php endif;?>
                     </div>
 
                     <!-- Required Fields Errors -->

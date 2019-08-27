@@ -12,12 +12,9 @@ class Validate{
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
-    public function length($input, $min, $max){
-        if(strlen($input) > $max){
+    public static function length($input, $min, $max){
+        if(strlen($input) > $max || strlen($input) < $min)
             return true;
-        }else if(strlen($input) < $min){
-            return true;
-        }
     }
 
 

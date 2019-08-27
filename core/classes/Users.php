@@ -28,6 +28,10 @@ class Users{
         return ((!empty($email))) ? $email : false;
     }
 
+    public function usernameExists($username){
+        $username = $this->get('users', array('username' => $username));
+        return ((!empty($username))) ? $username : false;
+    }
 
     public function hash($password){
         return password_hash($password, PASSWORD_BCRYPT);
