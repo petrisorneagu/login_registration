@@ -1,7 +1,8 @@
 <?php
 include 'core/init.php';
-Database::instance()->prepare("SELECT * FROM users")->execute();
-
+if($userObj->isLoggedIn()){
+    $userObj->redirect('home.php');
+}
 if(isset($_POST['login'])){
     $email    = Validate::escape($_POST['email']);
     $password = Validate::escape($_POST['password']);
@@ -10,7 +11,7 @@ if(isset($_POST['login'])){
         $error = "Enter your email and password to login!";
     }else {
         if(!Validate::filterEmail($email)){
-            $error = "Invalid email";
+            $error = "Invaild email";
         }else{
             if($user = $userObj->emailExist($email)){
                 $hash = $user->password;
@@ -27,14 +28,12 @@ if(isset($_POST['login'])){
         }
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>PHP: Login and Registration With Email & Mobile Verification</title>
-    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="assets/css/style.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
 </head>
@@ -47,27 +46,29 @@ if(isset($_POST['login'])){
         </div><!--HEADER WRAPPER ENDS-->
         <div class="sign-div">
             <div class="sign-in">
-                <form method="POST">
-                    <div class="signIn-inner">
+                <div class="signIn-inner">
+                    <form method="POST">
                         <div class="input-div">
                             <input type="email" name="email" placeholder="Email">
                             <input type="password" name="password" placeholder="Password">
                             <button type="submit" name="login">Login</button>
                         </div>
-                        <div class="error shake-horizontal">Errors shows here</div>
-                </form>
+                    </form>
+                    <?php if(isset($error)):?>
+                        <div class="error shake-horizontal"><?php echo $error;?></div>
+                    <?php endif;?>
+                </div>
             </div>
-        </div>
-        <div class="r-pass">
-            <a href="account/recovery/">I forget my Password</a>
-        </div>
-    </div><!--CONTENT WRAPPER ENDS-->
-    <div class="footer-wrapper">
-        <div class="inner-footer-wrap">
-            <div class="sign-up"><button class="sign-up-btn" onclick="location.href='account/settings';" type="submit">Sign Up</button></div>
-        </div>
-    </div><!--FOOTER WRAPPER ENDS-->
-</div>
+            <div class="r-pass">
+                <a href="account/recover/">I forget my Password</a>
+            </div>
+        </div><!--CONTENT WRAPPER ENDS-->
+        <div class="footer-wrapper">
+            <div class="inner-footer-wrap">
+                <div class="sign-up"><button class="sign-up-btn" onclick="location.href='register/';" type="submit">Sign Up</button></div>
+            </div>
+        </div><!--FOOTER WRAPPER ENDS-->
+    </div>
 </div><!--WRAPPER ENDS-->
 </body>
 </html>

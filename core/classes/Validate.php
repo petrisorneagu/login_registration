@@ -8,7 +8,7 @@ class Validate{
         return $input;
     }
 
-    public function filterEmail($email){
+    public static function filterEmail($email){
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
