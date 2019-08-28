@@ -65,7 +65,7 @@ if(isset($_POST['login'])){
         </div><!--CONTENT WRAPPER ENDS-->
         <div class="footer-wrapper">
             <div class="inner-footer-wrap">
-                <div class="sign-up"><button class="sign-up-btn" onclick="location.href='register/';" type="submit">Sign Up</button></div>
+                <div class="sign-up"><button class="sign-up-btn" onclick="location.href='register.php';" type="submit">Sign Up</button></div>
             </div>
         </div><!--FOOTER WRAPPER ENDS-->
     </div>
