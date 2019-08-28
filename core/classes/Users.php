@@ -6,6 +6,11 @@ class Users{
         $this->db = Database::instance();
     }
 
+    /**
+     * @param $table
+     * @param array $fields
+     * @return mixed
+     */
     public function get($table, $fields = array()){
         $columns = implode(', ', array_keys($fields));
         //sql query
@@ -22,6 +27,11 @@ class Users{
         }
     }
 
+    /**
+     * @param $table
+     * @param $fields
+     * @param $condition
+     */
     public function update($table, $fields, $condition){
         $columns = '';
         $where = " WHERE ";
