@@ -16,10 +16,10 @@ if(isset($_POST['update'])){
     }
     if(empty($errors['allFields'])){
             $firstName = Validate::escape($_POST['firstName']);
-            $lastName = Validate::escape($_POST['lastName']);
-            $username = Validate::escape($_POST['username']);
-            $email = Validate::escape($_POST['email']);
-            $password      = $_POST['password'];
+            $lastName  = Validate::escape($_POST['lastName']);
+            $username  = Validate::escape($_POST['username']);
+            $email     = Validate::escape($_POST['email']);
+            $password  = $_POST['password'];
 
         if(Validate::length($firstName, 2, 20)){
             $errors['names'] = "Names can only be between in 2 - 20 characters";
@@ -41,7 +41,11 @@ if(isset($_POST['update'])){
             $errors['email'] = 'Email already exists';
         }else{
             if(password_verify($password, $user->password)){
-//                update password
+//                update user
+                $userObj->update('users', array('firstName' => $firstName, 'lastName' => $lastName, 'username' => $username, 'email' => $email, 'password' => $password), array('user_id' => $user_id));
+                $userObj->redirect('home.php');
+
+            }else{
                 $errors['password'] = 'Password is incorrect';
             }
         }

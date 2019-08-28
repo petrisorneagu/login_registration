@@ -22,6 +22,44 @@ class Users{
         }
     }
 
+    public function update($table, $fields, $condition){
+        $columns = '';
+        $where = " WHERE ";
+        $i = 1; //count the fields to update
+
+//        create columns
+        foreach ($fields as $columnName => $columnValue) {
+            $columns .= "`{$columnName}` = :{$columnName}";
+//            if the field has more than 1 column to update -> add a comma
+            if($i < $fields){
+                $columns .= ", ";
+            }
+            $i++;
+        }
+//        create sql
+        $sql = "UPDATE {$table} SET {$columns}";
+//        add where condition
+        foreach($condition as $conditionName => $conditionValue){
+            $sql .= "{$where} `{$conditionName}`= :{$conditionName}";
+            $where = " AND ";
+        }
+//        check if sql is prepared
+        if($stmt = $this->db->prepare($sql)) {
+            foreach ($fields as $key => $value) {
+//                bind column to sql
+                $stmt->bindValue(":{$key}",$value);
+//                bind where conditions to sql query
+                foreach($condition as $key2 => $value2){
+                    $stmt->bindValue(":{$key2}", $value2);
+                }
+            }
+        }
+//        execute query
+        $stmt->execute();
+
+//        print_r($sql);
+    }
+
 
     public function emailExist($email){
         $email = $this->get('users', array('email' => $email));
