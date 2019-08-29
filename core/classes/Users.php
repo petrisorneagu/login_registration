@@ -27,7 +27,26 @@ class Users{
         }
     }
 
+    public function insert($table, $fields = array()){
+        $columns = implode(', ', array_keys($fields));//        print_r($columns);
+//        bind the values
+        $values = ":" .implode(', :', array_keys($fields));//        print_r($values);
+//        sql insert query
+        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$values})";
+//        var_dump($sql);
+        if($stmt = $this->db->prepare($sql)){
+            // bind values to placeholders(:)
+            foreach ($fields as $key => $value){
+                $stmt->bindValue(":{$key}", $value);
+            }
+            $stmt->execute();
+//                return user_id
+            return $this->db->lastInsertId();
+        }
+    }
+
     /**
+     * update table rows
      * @param $table
      * @param $fields
      * @param $condition

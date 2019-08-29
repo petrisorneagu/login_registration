@@ -1,5 +1,9 @@
 <?php
 include 'core/init.php';
+if($userObj->isLoggedIn()){
+    $userObj->redirect('home.php');
+}
+
 
 if(isset($_POST['signup'])){
     $required = array('firstName','lastName','username','email','password','passwordAgain','gender','month','day','year');
@@ -22,9 +26,7 @@ if(isset($_POST['signup'])){
         $month      = Validate::escape($_POST['month']);
         $day        = Validate::escape($_POST['day']);
         $year       = Validate::escape($_POST['year']);
-        $birthdate  = "$year" - "$day" - "$month";
-
-//        echo $firstName;
+        $birthdate  = "{$year}-{$month}-{$day}";
 
 
         if(Validate::length($firstName, 2, 20)){
@@ -50,6 +52,13 @@ if(isset($_POST['signup'])){
 
         }else{
             // insert the user and display the errors
+            $hash = $userObj->hash($password);
+            $user_id = $userObj->insert('users', array('firstName' => $firstName, 'lastName' => $lastName, 'username' => $username, 'email' => $email, 'password' => $hash, 'gender' => $gender, 'birthday' => $birthdate));
+            $_SESSION['user_id'] = $user->user_id;
+
+            echo $user_id;
+            $userObj->redirect('verification');
+
         }
     }
 }
@@ -221,7 +230,7 @@ if(isset($_POST['signup'])){
 
                         <!-- All Fields error -->
                         <?php if(isset($errors['allFields'])): ?>
-                        <span class="error-in"><?=$errors['allFields'];?></span>
+                            <span class="error-in"><?=$errors['allFields'];?></span>
                         <?php endif;?>
 
                     </div>
