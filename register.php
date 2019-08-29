@@ -9,9 +9,48 @@ if(isset($_POST['signup'])){
             $errors['allFields'] = 'All fields must be filled in';
         }
     }
-    if(empty($errors['allFields'])){
+
 //        validate form
-        echo 'is valid form';
+    if(!empty($errors['allFields'])){
+        $firstName  = Validate::escape($_POST['firstName']);
+        $lastName   = Validate::escape($_POST['lastName']);
+        $username   = Validate::escape($_POST['username']);
+        $email      = Validate::escape($_POST['email']);
+        $password   = $_POST['password'];
+        $rePassword = $_POST['passwordAgain'];
+        $gender     = Validate::escape($_POST['gender']);
+        $month      = Validate::escape($_POST['month']);
+        $day        = Validate::escape($_POST['day']);
+        $year       = Validate::escape($_POST['year']);
+        $birthdate  = "$year" - "$day" - "$month";
+
+//        echo $firstName;
+
+
+        if(Validate::length($firstName, 2, 20)){
+            $errors['names'] = "Names can only be between in 2 - 20 characters";
+
+        }else if (Validate::length($lastName, 2, 20)){
+            $errors['names'] = "Names can only be between in 2 - 20 characters";
+
+        }else if(Validate::length($username, 2, 10)){
+            $errors['username'] = "Username can only be between in 2 - 10 characters";
+
+        }else if ($userObj->usernameExists($username)){
+            $errors['username'] = "Username is already taken!";
+
+        }else if(!Validate::filterEmail($email)){
+            $errors['email'] = 'Invalid email format';
+
+        }elseif($userObj->emailExist($email)){
+            $errors['email'] = 'Email already exists';
+
+        }elseif($password != $rePassword){
+            $errors['password'] = 'Password does not match';
+
+        }else{
+            // insert the user and display the errors
+        }
     }
 }
 
@@ -35,26 +74,26 @@ if(isset($_POST['signup'])){
                 <form method="POST">
                     <div class="name">
                         <h3>Name</h3>
-                        <input type="text" name="firstName" placeholder="First Name"/>
-                        <input type="text" name="lastName" placeholder="Last Name"/>
+                        <input type="text" name="firstName" placeholder="First Name" value="<?php (isset($firstName)) ? Validate::escape($_POST['firstName']) : '';?>"/>
+                        <input type="text" name="lastName" placeholder="Last Name"  value="<?php (isset($lastName)) ? Validate::escape($_POST['lastName']) : '';?>"/>
                         <!-- Name Error -->
                         <?php if(isset($errors['names'])): ?>
-                            <span class="error-in"><?=$errors['name'];?></span>
+                            <span class="error-in"><?=$errors['names'];?></span>
                         <?php endif;?>
                     </div>
 
                     <div>
                         <h3>Username</h3>
-                        <input type="text" name="username" placeholder="Username" />
+                        <input type="text" name="username" placeholder="Username" value="<?php (isset($username)) ? Validate::escape($_POST['username']) : '';?>"/>
                         <!-- Username Error -->
                         <?php if(isset($errors['username'])): ?>
-                            <span class="error-in"><?=$errors['username'];?></span>
+                            <span class="error-in"><?php echo $errors['username'];?></span>
                         <?php endif;?>
                     </div>
 
                     <div>
                         <h3>Email</h3>
-                        <input type="email" name="email" placeholder="Email" />
+                        <input type="email" name="email" placeholder="Email" value="<?php (isset($email)) ? Validate::escape($_POST['email']) : '';?>"/>
                         <!-- Email Error -->
                         <?php if(isset($errors['email'])): ?>
                             <span class="error-in"><?=$errors['email'];?></span>
@@ -70,7 +109,6 @@ if(isset($_POST['signup'])){
                         <?php if(isset($errors['password'])): ?>
                             <span class="error-in"><?=$errors['password'];?></span>
                         <?php endif;?>
-                        <span class="error-in">Password field error</span>
                     </div>
 
                     <div>
