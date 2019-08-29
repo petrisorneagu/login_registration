@@ -3,7 +3,9 @@ include 'core/init.php';
 
 $user_id = $_SESSION['user_id'];
 $user = $userObj->userData($user_id);
-// echo $user_id;
+ echo $user_id;
+
+
 
 ?>
 <!DOCTYPE html>
@@ -32,14 +34,14 @@ $user = $userObj->userData($user_id);
                                     <img src="img/avatar.png"/>
                                 </div>
                                 <div class="profile-name">
-                                    <a href="#"><?echo $user->firstname .' '. $user->lastname;?></a>
+                                    <a href="#"><?php echo $user->firstName.' '.$user->lastName;?></a>
                                 </div>
                             </div>
 
                             <div class="profile-content">
                                 <div class="profile-date-l">
-                                    <?echo $date = $user->joined; ?>
-                                    Joined Date: <?echo date('F - Y', strtotime($date));?>
+                                    <?php echo $date = $user->joined; ?>
+                                    Joined Date: <?php echo date('F - Y', strtotime($date));?>
                                 </div>
                                 <div class="profile-dis">
                                 </div>
