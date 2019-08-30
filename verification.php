@@ -3,8 +3,9 @@
 include 'core/init.php';
 
 $user_id = $_SESSION['user_id'];
-$user_id = $userObj->userData($user_id);
-//echo $user_id;
+$user    = $userObj->userData($user_id);
+
+//echo $userObj->userData($user_id);
 
 ?>
 <!DOCTYPE html>
@@ -13,9 +14,6 @@ $user_id = $userObj->userData($user_id);
     <title>Verification</title>
     <link rel="stylesheet" href="css/style.css"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-
-
-
 </head>
 <body class="body2">
 <div class="p2-wrapper">
@@ -27,27 +25,30 @@ $user_id = $userObj->userData($user_id);
                     <fieldset>
                         <legend>Method 1</legend>
                         <form method="POST">
-                            <h3>Email verificaiton</h3>
-                            <input type="email" name="email" disabled placeholder="User email" value="User email"/>
+                            <h3>Email verification</h3>
+                            <input type="email" name="email" disabled placeholder="<?= $user->email;?>" value="<?= $user->email;?>"/>
                             <button type="submit" class="suc">Send me verification email</button>
                         </form>
                     </fieldset>
                 </div>
                 <!-- Email error field -->
-                <span class="error-in"><b>Email Field Error</b></span>
-
+                <?php if(isset($errors['email'])) :?>
+                <span class="error-in"><b><?=$errors['email'];?></b></span>
+                <?php endif;?>
                 <fieldset>
                     <legend>Method 2</legend>
                     <div>
-                        <h3>Phone verificaiton</h3>
+                        <h3>Phone verification</h3>
                         <form method="POST">
-                            <input type="tel" name="number" placeholder="Enter your Phone number"/>
+                            <input type="tel" name="number" placeholder="<?= $user->phone;?>" value="<?= $user->phone;?>"/>
                             <button type="submit" name="phone" class="suc">Send verification code via SMS</button>
                         </form>
                     </div>
                 </fieldset>
                 <!-- Phone error field -->
-                <span class="error-in"><b>Phone Field Error</b></span>
+                <?php if(isset($errors['phone'])) :?>
+                    <span class="error-in"><b><?=$errors['phone'];?></b></span>
+                <?php endif;?>
             </div>
         </div>
     </div>
