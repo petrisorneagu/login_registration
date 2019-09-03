@@ -2,8 +2,10 @@
 //echo 'verification';
 include 'core/init.php';
 
-$user_id = $_SESSION['user_id'];
-$user    = $userObj->userData($user_id);
+if(isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $user = $userObj->userData($user_id);
+}
 
 //echo $userObj->userData($user_id);
 
@@ -26,7 +28,7 @@ $user    = $userObj->userData($user_id);
                         <legend>Method 1</legend>
                         <form method="POST">
                             <h3>Email verification</h3>
-                            <input type="email" name="email" disabled placeholder="<?= $user->email;?>" value="<?= $user->email;?>"/>
+                            <input type="email" name="email" disabled placeholder="" value=""/>
                             <button type="submit" class="suc">Send me verification email</button>
                         </form>
                     </fieldset>
@@ -40,7 +42,7 @@ $user    = $userObj->userData($user_id);
                     <div>
                         <h3>Phone verification</h3>
                         <form method="POST">
-                            <input type="tel" name="number" placeholder="<?= $user->phone;?>" value="<?= $user->phone;?>"/>
+                            <input type="tel" name="number" placeholder="" value=""/>
                             <button type="submit" name="phone" class="suc">Send verification code via SMS</button>
                         </form>
                     </div>
