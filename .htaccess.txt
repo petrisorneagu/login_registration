@@ -1,3 +1,6 @@
 RewriteEngine On
 RewriteRule ^settings/?$ settings.php
 RewriteRule ^register/?$ register.php
+RewriteRule ^verification/?$ verification.php
+
+php_value session.auto_start 1
