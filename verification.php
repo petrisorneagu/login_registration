@@ -7,6 +7,11 @@ if(isset($_SESSION['user_id'])) {
     $user = $userObj->userData($user_id);
 }
 
+if(isset($_POST['email'])){
+       $link = Verify::generateLink();
+       echo $link;
+}
+
 //echo $userObj->userData($user_id);
 
 ?>
@@ -28,7 +33,7 @@ if(isset($_SESSION['user_id'])) {
                         <legend>Method 1</legend>
                         <form method="POST">
                             <h3>Email verification</h3>
-                            <input type="email" name="email" disabled placeholder="" value=""/>
+                            <input type="email" name="email"  placeholder="" value=""/>
                             <button type="submit" class="suc">Send me verification email</button>
                         </form>
                     </fieldset>
