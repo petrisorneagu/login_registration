@@ -2,14 +2,15 @@
 //echo 'verification';
 include 'core/init.php';
 
-if(isset($_SESSION['user_id'])) {
+//if(isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $user = $userObj->userData($user_id);
-}
+//}
 
 if(isset($_POST['email'])){
-       $link = Verify::generateLink();
-       echo $link;
+    $link = Verify::generateLink();
+    $message = "{$user->firstName}, Your acc has been created. Visit this link to verify your account : <a href='{$link}'>Verify link</a>";
+    $verifyObj->sendToMail("petre3@yahoo.com", $message);
 }
 
 //echo $userObj->userData($user_id);
