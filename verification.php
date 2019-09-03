@@ -3,14 +3,16 @@
 include 'core/init.php';
 
 //if(isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $user = $userObj->userData($user_id);
+//    $user_id = $_SESSION['user_id'];
+    $user = $userObj->userData(8);
 //}
 
 if(isset($_POST['email'])){
     $link = Verify::generateLink();
     $message = "{$user->firstName}, Your acc has been created. Visit this link to verify your account : <a href='{$link}'>Verify link</a>";
-    $verifyObj->sendToMail("petre3@yahoo.com", $message);
+    $verifyObj->sendToMail($user->email, $message);
+    $userObj->insert('verification', array('user_id' => 8, 'code' => $link));
+    $userObj->redirect('verification.php?mail=sent');
 }
 
 //echo $userObj->userData($user_id);
@@ -29,14 +31,18 @@ if(isset($_POST['email'])){
         <div class="sign-up-inner">
             <div class="sign-up-div">
                 <div class="name">
-                    <h4>Your account has been created, you need to activate your account by following methods:</h4>
+
                     <fieldset>
                         <legend>Method 1</legend>
-                        <form method="POST">
+                        <?php if(isset($_GET['mail'])) :?>
+                            <h4>Your account has been created, you need to activate your account by following methods:</h4>
+                        <?php else :?>
                             <h3>Email verification</h3>
-                            <input type="email" name="email"  placeholder="" value=""/>
-                            <button type="submit" class="suc">Send me verification email</button>
-                        </form>
+                            <form method="POST">
+                                <input type="email" name="email"  placeholder="" value=""/>
+                                <button type="submit" class="suc">Send me verification email</button>
+                            </form>
+                        <?php endif;?>
                     </fieldset>
                 </div>
                 <!-- Email error field -->
