@@ -10,9 +10,28 @@ include 'core/init.php';
 if(isset($_POST['email'])){
     $link = Verify::generateLink();
     $message = "{$user->firstName}, Your acc has been created. Visit this link to verify your account : <a href='{$link}'>Verify link</a>";
-    $verifyObj->sendToMail($user->email, $message);
+    $verifyObj->sendToMail('petrisor.neagu@gmail.com', $message);
     $userObj->insert('verification', array('user_id' => 8, 'code' => $link));
     $userObj->redirect('verification.php?mail=sent');
+}
+
+if(isset($_GET['verify'])){
+    $code = Validate::escape($_GET['verify']);
+    $verify = $verifyObj->verifyCode($code);
+
+    if($verify){
+//        if verif code is expired
+            if($verify->createdAt < date('Y-m-d')){
+                $errors['verify'] = "Your verification link is expired";
+            }else{
+//                update user account
+                $userObj->update('verification', array('status' => '1'), array('user_id' => 8, 'code' => $code));
+                $userObj->redirect('home.php');
+            }
+    }else{
+        $errors['verify'] = 'Invalid verification link';
+    }
+
 }
 
 //echo $userObj->userData($user_id);
@@ -31,11 +50,18 @@ if(isset($_POST['email'])){
         <div class="sign-up-inner">
             <div class="sign-up-div">
                 <div class="name">
-
+                <?php if(isset($_GET['verify']) || !empty($_GET['verify'])){
+                    if(isset($errors['verify'])){
+                        echo "<h4>" .$errors['verify']. "</h4>";
+                    }
+                }else{
+//                    display the form
+                ?>
                     <fieldset>
+                        <h4>Your account has been created, you need to activate your account by following methods:</h4>
                         <legend>Method 1</legend>
                         <?php if(isset($_GET['mail'])) :?>
-                            <h4>Your account has been created, you need to activate your account by following methods:</h4>
+                            <h4>A verification mail has been sent to your email.</h4>
                         <?php else :?>
                             <h3>Email verification</h3>
                             <form method="POST">
@@ -64,6 +90,7 @@ if(isset($_POST['email'])){
                     <span class="error-in"><b><?=$errors['phone'];?></b></span>
                 <?php endif;?>
             </div>
+            <?php } ?>
         </div>
     </div>
 </div>

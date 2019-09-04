@@ -4,9 +4,13 @@
 class Verify
 {
 protected $db;
+protected $user;
+
  public function __construct()
  {
+
      $this->db = \Database::instance();
+     $this->user = new Users();
  }
 
     /**
@@ -14,6 +18,14 @@ protected $db;
      */
  public static function generateLink(){
      return str_shuffle(substr(md5(time().mt_rand().time()),0,25));
+ }
+
+    /** verify if a code exists in db
+     * @param $code
+     * @return mixed
+     */
+ public function verifyCode($code){
+     return $this->user->get('verification', array('code' => $code));
  }
 
  public function sendToMail($mail, $message){
