@@ -9,6 +9,7 @@
             require_once "classes/{$class}.php";
         });
 
-        $userObj = new Users;
+        $userObj = new Users();
+        $verifyObj  = new Verify();
 
         session_start();
