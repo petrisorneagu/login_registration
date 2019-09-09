@@ -52,24 +52,22 @@ class Users{
      * @param $condition
      */
     public function update($table, $fields, $condition){
-        $columns = '';
-        $where = " WHERE ";
-        $i = 1; //count the fields to update
-
-//        create columns
-        foreach ($fields as $columnName => $columnValue) {
-            $columns .= "`{$columnName}` = :{$columnName}";
-//            if the field has more than 1 column to update -> add a comma
-            if($i < $fields){
+        $columns  = '';
+        $where    = " WHERE ";
+        $i        = 1;
+        //create columns
+        foreach($fields as $name => $value){
+            $columns .= "`{$name}` = :{$name}";
+            if($i < count($fields)){
                 $columns .= ", ";
             }
             $i++;
         }
-//        create sql
+        //create sql query
         $sql = "UPDATE {$table} SET {$columns}";
-//        add where condition
-        foreach($condition as $conditionName => $conditionValue){
-            $sql .= "{$where} `{$conditionName}`= :{$conditionName}";
+        //adding where condition to sql query
+        foreach($condition as $name => $value){
+            $sql .= "{$where} `{$name}` = :{$name}";
             $where = " AND ";
         }
 //        check if sql is prepared
