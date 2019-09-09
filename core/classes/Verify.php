@@ -18,6 +18,10 @@ protected $user;
      return str_shuffle(substr(md5(time().mt_rand().time()),0,25));
  }
 
+ public function generateCode(){
+     return mb_strtoupper(substr(md5(mt_rand().time()), 0, 5));
+ }
+
     /** verify if a code exists in db
      * @param $code
      * @return mixed
@@ -33,7 +37,7 @@ protected $user;
      $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT); //bind only integers
      $stmt->execute();
      $user = $stmt->fetch(PDO::FETCH_OBJ);
-     $files = array('verification.php');
+     $files = array('verification.php', 'verifyCode.php');
 
      if(!$this->user->isLoggedIn()){
          $this->user->redirect('index.php');
@@ -82,7 +86,35 @@ protected $user;
          }
 
      }
+ }
 
+ public function sendToPhone($number, $message){
+     $username = 'petrisor@madball.ro';
+
+//     this is from "text local" api documentation
+     $apiHash = "e16e12ae606a712724ee37f216c93644a16d49f69481c95b4c6443a90674be3d";
+     $apiUrl = "https://api.txtlocal.com/send/";
+     $test = "0";
+//     post username api hash and sms
+     $data = "username={$username}&hash={$apiHash}&message={$message}&numbers={$number}&test={$test}";
+
+     if(!empty($number)){
+         $ch = curl_init($apiUrl);
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         $response  =curl_exec($ch);
+
+         $result = json_decode($response);
+
+//         var_dump($response);
+         if($result->status === 'success'){
+             return true;
+         }else{
+             return false;
+         }
+
+     }
  }
 
 }
