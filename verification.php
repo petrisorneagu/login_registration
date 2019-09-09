@@ -2,14 +2,17 @@
 //echo 'verification';
 include 'core/init.php';
 
-//    $user_id = $_SESSION['user_id'];
-    $user = $userObj->userData(8);
-//}
+
+    $user_id = $_SESSION['user_id'];
+    $user = $userObj->userData($user_id);
+//    echo $user->user_id;
+
+    //$user_id = 8;
 
 if(isset($_POST['email'])){
     $link = Verify::generateLink();
     $message = "{$user->firstName}, Your acc has been created. Visit this link to verify your account : <a href='{$link}'>Verify link</a>";
-    $verifyObj->sendToMail('petrisor.neagu@gmail.com', $message);
+    $verifyObj->sendToMail($user->email, $message);
     $userObj->insert('verification', array('user_id' => 8, 'code' => $link));
     $userObj->redirect('verification.php?mail=sent');
 }
@@ -24,11 +27,37 @@ if(isset($_GET['verify'])){
                 $errors['verify'] = "Your verification link is expired";
             }else{
 //                update user account
-                $userObj->update('verification', array('status' => '1'), array('user_id' => 8, 'code' => $code));
+                $userObj->update('verification', array('status' => '1'), array('user_id' => $user_id, 'code' => $code));
                 $userObj->redirect('home.php');
             }
     }else{
         $errors['verify'] = 'Invalid verification link';
+    }
+}
+
+if(isset($_POST['phone'])){
+    $number = Validate::escape($_POST['number']);
+
+    if(!empty($number)){
+            if(preg_match("/(^[0-9]+)$/", $number)){
+                $number = urlencode($number);
+                $code = $verifyObj->generateCode();
+                $message = "$user->firstName, your account has been created, this is your verification code: {$code}";
+                $result = $verifyObj->sendToPhone($number, $message);
+                $userObj->insert('verification', array('user_id'=>$user_id, 'code' => $code));
+                if($result){
+//                    update the phone nr. in user table
+                    $userObj->update('users', array('phone'=>$number), array('user_id' => $user_id));
+//                    $userObj->redirect('verification.php');
+                }else{
+                    $errors['phone'] = "Something went wrong. Try again or other method.";
+                }
+
+            }else{
+                $errors['phone'] = "Only valid numbers are allowed";
+            }
+    }else{
+        $errors['phone'] = 'Enter your mobile phone to get verification code';
     }
 
 }
