@@ -3,6 +3,7 @@
         include 'classes/PHPMailer.php';
         include 'classes/SMTP.php';
         include 'classes/Exception.php';
+        date_default_timezone_set('Europe/Bucharest');
 
 //        autoloader - includes classes
         spl_autoload_register(function($class){
