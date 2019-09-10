@@ -30,6 +30,9 @@ protected $user;
      return $this->user->get('verification', array('code' => $code));
  }
 
+ public function verifyResetPassword($code){
+     return $this->user->get('recovery', array('code' => $code));
+ }
 
  public function authOnly(){
      $user_id = $_SESSION['user_id'];
@@ -59,7 +62,7 @@ protected $user;
  }
 
 
- public function sendToMail($email, $message){
+ public function sendToMail($email, $message,$subject){
      $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
      $mail->isSMTP();
      $mail->SMTPAuth = true;
@@ -75,7 +78,7 @@ protected $user;
          $mail->FromName = "petrisor";
          $mail->addReplyTo("reply@petrisor.com");
          $mail->addAddress($email);
-         $mail->Subject = 'verificare';
+         $mail->Subject = $subject;
          $mail->Body = $message;
          $mail->AltBody =$message;
 
