@@ -22,6 +22,26 @@ if(isset($_GET['password']) && isset($_GET['verify'])){
         $userObj->redirect('index.php');
     }
 }
+
+if(isset($_POST['reset'])){
+    $password = $_POST['rPassword'];
+    $confirmPassword = $_POST['rPasswordAgain'];
+    if(!empty($password)){
+        if($password !== $confirmPassword){
+            $errors['reset'] = "The password doesn't match";
+        }else if(Validate::length($password,5, 20)){
+            $errors['reset'] = "Password must be between 5 to 20 characters.";
+        }else{
+//             update password field
+            $hash = $userObj->hash($password);
+            $userObj->update('users', array('password' => $hash), array('user_id' => $verify->user_id));
+            $userObj->redirect('password.php?success=true');
+        }
+
+    }else{
+        $errors['reset'] = "Please enter your new password";
+    }
+ }
 ?>
 
 
@@ -45,7 +65,7 @@ if(isset($_GET['password']) && isset($_GET['verify'])){
     <div class="sign-div">
         <div class="sign-in">
             <?php if(isset($_GET['success'])):?>
-                <div class="success-message">Your password has been changed, now you can<a href="http://dev.test.com/OOP_login-registration"></a></div> //your local path
+                <div class="success-message">Your password has been changed, now you can <a href="index.php">Login</a></div>
 
             <?php else:?>
             <div class="signIn-inner">
