@@ -14,7 +14,7 @@ if(isset($_POST['recover'])){
                 $link = $verifyObj->generateLink();
                 $message = "{$user->firstName}, Someone requested for a new pass. If you didn't , ignore the email. If you did, here is your reset link <a href='http://localhost/OOP_login_registration/recover.php/{$link}'>Reset pass</a>";
                 $subject  = "Reset pass";
-                $verifyObj->sendToMail('petrisor.neagu@gmail.com', $message ,$subject);
+                $verifyObj->sendToMail($user->email, $message ,$subject);
                 $userObj->insert('recovery', array('user_id' => $user->user_id, 'code' => $link));
                 $userObj->redirect('recover.php?mail=sent'); 
             }else{
