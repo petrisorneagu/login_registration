@@ -11,7 +11,7 @@ if(isset($_POST['verify'])) {
     if (!empty($code)) {
         if ($verify) {
 //        if verif code is expired
-            if ($verify->createdAt < date('Y-m-d')) {
+            if (date('Y-m-d', strtotime($verify->createdAt)) < date('Y-m-d')) {
                 $errors['verify'] = "Your verification code is expired";
             } else {
 //                update user account
